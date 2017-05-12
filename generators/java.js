@@ -163,6 +163,12 @@ Blockly.Java.getPackage = function () {
 };
 
 /**
+ * Package, imports, class
+ */
+var skeleton = "import example.maple\n" +
+    "class SDNSolution {\n";
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -215,7 +221,7 @@ Blockly.Java.finish = function(code) {
     delete Blockly.Java.definitions_;
     delete Blockly.Java.functionNames_;
     Blockly.Java.variableDB_.reset();
-    return definitions.join('\n\n') + '\n\n\n' + code;
+    return skeleton + "\n" + definitions.join('\n\n') + '\n\n\n' + code + "\n}\n";
 };
 
 /**
