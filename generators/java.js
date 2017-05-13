@@ -230,7 +230,7 @@ Blockly.Java.finish = function(code) {
   delete Blockly.Java.definitions_;
   delete Blockly.Java.functionNames_;
   Blockly.Java.variableDB_.reset();
-  return skeleton + "\n" + definitions.join('\n\n') + '\n\n\n' + code + "\n}\n";
+  return skeleton + "\n" + definitions.join('\n') + '\n' + code + "\n}\n";
 };
 
 /**
