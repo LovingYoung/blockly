@@ -416,8 +416,8 @@ Blockly.Blocks['procedures_mutatorarg'] = {
 
     // Create the default variable when we drag the block in from the flyout.
     // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.createNewVar_;
-    field.onFinishEditing_('x');
+    //field.onFinishEditing_ = this.createNewVar_;
+    //field.onFinishEditing_('x');
   },
   /**
    * Obtain a valid name for the procedure.
