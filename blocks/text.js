@@ -237,7 +237,7 @@ Blockly.Blocks['text_append'] = {
     this.appendValueInput('TEXT')
         .appendField(Blockly.Msg.TEXT_APPEND_TO)
         .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.TEXT_APPEND_VARIABLE), 'VAR')
+        "String-item"), 'VAR')
         .appendField(Blockly.Msg.TEXT_APPEND_APPENDTEXT);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
