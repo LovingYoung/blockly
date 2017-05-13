@@ -91,6 +91,7 @@ Blockly.Java.ORDER_LOGICAL_OR = 14;     // ||
 Blockly.Java.ORDER_CONDITIONAL = 15;    // ? :
 
 Blockly.Java.ORDER_ASSIGNMENT = 16;  // = += -= *= /= %= &= ^= |= <<= >>= >>>=
+Blockly.Java.ORDER_COMMA = 17; // ,
 
 Blockly.Java.ORDER_NONE = 99;       // (...)
 
@@ -256,7 +257,7 @@ Blockly.Java.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
     .replace(/\n/g, '\\\n')
     .replace(/'/g, '\\\'');
-  return '\'' + string + '\'';
+  return '\"' + string + '\"';
 };
 
 /**
