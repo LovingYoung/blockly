@@ -44,77 +44,85 @@ Blockly.Java = new Blockly.Generator('Java');
  * @private
  */
 Blockly.Java.addReservedWords(
-    // import keyword
-    // print ','.join(keyword.kwlist)
-    // http://en.wikipedia.org/wiki/List_of_Java_keywords
-    'abstract,assert,boolean,break,case,catch,class,const,continue,default,do,double,else,enum,extends,final,finally,float,for,goto,if,implements,import,instanceof,int,interface,long,native,new,package,private,protected,public,return,short,static,strictfp,super,switch,synchronized,this,throw,throws,transient,try,void,volatile,while,' +
-    //http://en.wikipedia.org/wiki/List_of_Java_keywords#Reserved_words_for_literal_values
-    'false,null,true,' +
-    // http://docs.Java.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,equal'
+  // import keyword
+  // print ','.join(keyword.kwlist)
+  // http://en.wikipedia.org/wiki/List_of_Java_keywords
+  'abstract,assert,boolean,break,case,catch,class,const,continue,default,do,double,else,enum,' +
+  'extends,final,finally,float,for,goto,if,implements,import,instanceof,int,interface,long,native,' +
+  'new,package,private,protected,public,return,short,static,strictfp,super,switch,synchronized,' +
+  'this,throw,throws,transient,try,void,volatile,while,' +
+  //http://en.wikipedia.org/wiki/List_of_Java_keywords#Reserved_words_for_literal_values
+  'false,null,true,' +
+  // http://docs.Java.org/library/functions.html
+  'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,' +
+  'sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,' +
+  'len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,' +
+  'chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,' +
+  'zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,' +
+  'setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,equal'
 );
 
 /**
  * Order of operation ENUMs.
  * https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html
  */
-Blockly.Java.ORDER_ATOMIC = 0;            // 0 "" ...
-Blockly.Java.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
+Blockly.Java.ORDER_ATOMIC = 0;      // 0 "" ...
+Blockly.Java.ORDER_COLLECTION = 1;    // tuples, lists, dictionaries
 Blockly.Java.ORDER_STRING_CONVERSION = 1; // `expression...`
 
-Blockly.Java.ORDER_MEMBER = 2;            // . []
-Blockly.Java.ORDER_FUNCTION_CALL = 2;     // ()
+Blockly.Java.ORDER_MEMBER = 2;      // . []
+Blockly.Java.ORDER_FUNCTION_CALL = 2;   // ()
 
-Blockly.Java.ORDER_POSTFIX = 3;           // expr++ expr--
-Blockly.Java.ORDER_EXPONENTIATION = 3;    // **
+Blockly.Java.ORDER_POSTFIX = 3;       // expr++ expr--
+Blockly.Java.ORDER_EXPONENTIATION = 3;  // **
 
-Blockly.Java.ORDER_LOGICAL_NOT = 3;       // not
-Blockly.Java.ORDER_UNARY_SIGN = 4;        // ++expr --expr +expr -expr ~ !
-Blockly.Java.ORDER_MULTIPLICATIVE = 5;    // * / %
-Blockly.Java.ORDER_ADDITIVE = 6;          // + -
-Blockly.Java.ORDER_BITWISE_SHIFT = 7;     // << >> >>>
-Blockly.Java.ORDER_RELATIONAL = 8;        // < > <= >= instanceof
-Blockly.Java.ORDER_EQUALITY = 9;          // == !=
-Blockly.Java.ORDER_BITWISE_AND = 10;      // &
-Blockly.Java.ORDER_BITWISE_XOR = 11;      // ^
-Blockly.Java.ORDER_BITWISE_OR = 12;       // |
-Blockly.Java.ORDER_LOGICAL_AND = 13;      // &&
-Blockly.Java.ORDER_LOGICAL_OR = 14;       // ||
-Blockly.Java.ORDER_CONDITIONAL = 15;      // ? :
+Blockly.Java.ORDER_LOGICAL_NOT = 3;     // not
+Blockly.Java.ORDER_UNARY_SIGN = 4;    // ++expr --expr +expr -expr ~ !
+Blockly.Java.ORDER_MULTIPLICATIVE = 5;  // * / %
+Blockly.Java.ORDER_ADDITIVE = 6;      // + -
+Blockly.Java.ORDER_BITWISE_SHIFT = 7;   // << >> >>>
+Blockly.Java.ORDER_RELATIONAL = 8;    // < > <= >= instanceof
+Blockly.Java.ORDER_EQUALITY = 9;      // == !=
+Blockly.Java.ORDER_BITWISE_AND = 10;    // &
+Blockly.Java.ORDER_BITWISE_XOR = 11;    // ^
+Blockly.Java.ORDER_BITWISE_OR = 12;     // |
+Blockly.Java.ORDER_LOGICAL_AND = 13;    // &&
+Blockly.Java.ORDER_LOGICAL_OR = 14;     // ||
+Blockly.Java.ORDER_CONDITIONAL = 15;    // ? :
 
 Blockly.Java.ORDER_ASSIGNMENT = 16;  // = += -= *= /= %= &= ^= |= <<= >>= >>>=
 
-Blockly.Java.ORDER_NONE = 99;             // (...)
+Blockly.Java.ORDER_NONE = 99;       // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
  * @type {!Array.<!Array.<number>>}
  */
 Blockly.Java.ORDER_OVERRIDES = [
-    // (foo()).bar -> foo().bar
-    // (foo())[0] -> foo()[0]
-    [Blockly.Java.ORDER_FUNCTION_CALL, Blockly.Java.ORDER_MEMBER],
-    // (foo())() -> foo()()
-    [Blockly.Java.ORDER_FUNCTION_CALL, Blockly.Java.ORDER_FUNCTION_CALL],
-    // (foo.bar).baz -> foo.bar.baz
-    // (foo.bar)[0] -> foo.bar[0]
-    // (foo[0]).bar -> foo[0].bar
-    // (foo[0])[1] -> foo[0][1]
-    [Blockly.Java.ORDER_MEMBER, Blockly.Java.ORDER_MEMBER],
-    // (foo.bar)() -> foo.bar()
-    // (foo[0])() -> foo[0]()
-    [Blockly.Java.ORDER_MEMBER, Blockly.Java.ORDER_FUNCTION_CALL],
+  // (foo()).bar -> foo().bar
+  // (foo())[0] -> foo()[0]
+  [Blockly.Java.ORDER_FUNCTION_CALL, Blockly.Java.ORDER_MEMBER],
+  // (foo())() -> foo()()
+  [Blockly.Java.ORDER_FUNCTION_CALL, Blockly.Java.ORDER_FUNCTION_CALL],
+  // (foo.bar).baz -> foo.bar.baz
+  // (foo.bar)[0] -> foo.bar[0]
+  // (foo[0]).bar -> foo[0].bar
+  // (foo[0])[1] -> foo[0][1]
+  [Blockly.Java.ORDER_MEMBER, Blockly.Java.ORDER_MEMBER],
+  // (foo.bar)() -> foo.bar()
+  // (foo[0])() -> foo[0]()
+  [Blockly.Java.ORDER_MEMBER, Blockly.Java.ORDER_FUNCTION_CALL],
 
-    // !(!foo) -> !!foo
-    [Blockly.Java.ORDER_LOGICAL_NOT, Blockly.Java.ORDER_LOGICAL_NOT],
-    // a * (b * c) -> a * b * c
-    [Blockly.Java.ORDER_MULTIPLICATION, Blockly.Java.ORDER_MULTIPLICATION],
-    // a + (b + c) -> a + b + c
-    [Blockly.Java.ORDER_ADDITION, Blockly.Java.ORDER_ADDITION],
-    // a && (b && c) -> a && b && c
-    [Blockly.Java.ORDER_LOGICAL_AND, Blockly.Java.ORDER_LOGICAL_AND],
-    // a || (b || c) -> a || b || c
-    [Blockly.Java.ORDER_LOGICAL_OR, Blockly.Java.ORDER_LOGICAL_OR]
+  // !(!foo) -> !!foo
+  [Blockly.Java.ORDER_LOGICAL_NOT, Blockly.Java.ORDER_LOGICAL_NOT],
+  // a * (b * c) -> a * b * c
+  [Blockly.Java.ORDER_MULTIPLICATION, Blockly.Java.ORDER_MULTIPLICATION],
+  // a + (b + c) -> a + b + c
+  [Blockly.Java.ORDER_ADDITION, Blockly.Java.ORDER_ADDITION],
+  // a && (b && c) -> a && b && c
+  [Blockly.Java.ORDER_LOGICAL_AND, Blockly.Java.ORDER_LOGICAL_AND],
+  // a || (b || c) -> a || b || c
+  [Blockly.Java.ORDER_LOGICAL_OR, Blockly.Java.ORDER_LOGICAL_OR]
 ];
 
 /**
@@ -136,11 +144,11 @@ Blockly.Java.blocklyTypes_ = {};
  * Set the application name
  * @param {string} name Name for the application
  */
-Blockly.Java.setAppName = function (name) {
-    if(!name || name === '') {
-        name = 'MapleApp';
-    }
-    Blockly.Java.AppName_ = name;
+Blockly.Java.setAppName = function(name) {
+  if(!name || name === '') {
+    name = 'MapleApp';
+  }
+  Blockly.Java.AppName_ = name;
 };
 
 /**
@@ -148,62 +156,63 @@ Blockly.Java.setAppName = function (name) {
  * @param {string} javaPackage Name of the package this is derived from
  */
 Blockly.Java.setPackage = function(javaPackage) {
-    if (!javaPackage || javaPackage === '') {
-        javaPackage = 'demo';
-    }
-    Blockly.Java.Package_ = javaPackage;
+  if (!javaPackage || javaPackage === '') {
+    javaPackage = 'demo';
+  }
+  Blockly.Java.Package_ = javaPackage;
 };
 
 /**
  * Get the packege name
  * @return {string} package name of the application
  */
-Blockly.Java.getPackage = function () {
-    return Blockly.Java.Package_;
+Blockly.Java.getPackage = function() {
+  return Blockly.Java.Package_;
 };
 
 /**
  * Package, imports, class
  */
 var skeleton = "import example.maple\n" +
-    "class SDNSolution {\n";
+  "class SDNSolution {\n";
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Java.init = function(workspace) {
-    // Create a dictionary of definitions to be printed before the code.
-    Blockly.Java.definitions_ = Object.create(null);
-    // Create a dictionary mapping desired function names in definitions_
-    // to actual function names (to avoid collisions with user functions).
-    Blockly.Java.functionNames_ = Object.create(null);
-    // Create a dictionary of all libraries which would be needed
-    Blockly.Java.imports_ = Object.create(null);
+  // Create a dictionary of definitions to be printed before the code.
+  Blockly.Java.definitions_ = Object.create(null);
+  // Create a dictionary mapping desired function names in definitions_
+  // to actual function names (to avoid collisions with user functions).
+  Blockly.Java.functionNames_ = Object.create(null);
+  // Create a dictionary of all libraries which would be needed
+  Blockly.Java.imports_ = Object.create(null);
 
-    if (!Blockly.Java.variableDB_) {
-        Blockly.Java.variableDB_ =
-            new Blockly.Names(Blockly.Java.RESERVED_WORDS_);
-    } else {
-        Blockly.Java.variableDB_.reset();
-    }
+  if (!Blockly.Java.variableDB_) {
+    Blockly.Java.variableDB_ =
+      new Blockly.Names(Blockly.Java.RESERVED_WORDS_);
+  } else {
+    Blockly.Java.variableDB_.reset();
+  }
 
-    var defvars = [];
-    var variables = workspace.variableList;
-    if (variables.length) {
-        for (var i = 0; i < variables.length; i++) {
-            // defvars[i] = Blockly.Java.variableDB_.getName(variables[i], Blockly.Variables.NAME_TYPE);
-            var split = variables[i].split('-');
-            var type = split[0]; var name = split[1];
-            Blockly.Java.blocklyTypes_[name] = type;
-        }
-        // Blockly.Java.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
-        Blockly.Java.definitions_['variables'] = '';
-        defvars = Object.keys(Blockly.Java.blocklyTypes_);
-        for(var i = 0; i < defvars.length; i++){
-            Blockly.Java.definitions_['variables'] += ("private " + Blockly.Java.blocklyTypes_[defvars[i]] + ' ' + defvars[i] +';\n');
-        }
+  var defvars = [];
+  var variables = workspace.variableList;
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      // defvars[i] = Blockly.Java.variableDB_.getName(variables[i], Blockly.Variables.NAME_TYPE);
+      var split = variables[i].split('-');
+      var type = split[0]; var name = split[1];
+      Blockly.Java.blocklyTypes_[name] = type;
     }
+    // Blockly.Java.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
+    Blockly.Java.definitions_['variables'] = '';
+    defvars = Object.keys(Blockly.Java.blocklyTypes_);
+    for(var i = 0; i < defvars.length; i++){
+      Blockly.Java.definitions_['variables'] +=
+        ("private " + Blockly.Java.blocklyTypes_[defvars[i]] + ' ' + defvars[i] +';\n');
+    }
+  }
 };
 
 /**
@@ -212,16 +221,16 @@ Blockly.Java.init = function(workspace) {
  * @return {string} Completed code.
  */
 Blockly.Java.finish = function(code) {
-    // Convert the definitions dictionary into a list.
-    var definitions = [];
-    for (var name in Blockly.Java.definitions_) {
-        definitions.push(Blockly.Java.definitions_[name]);
-    }
-    // Clean up temporary data.
-    delete Blockly.Java.definitions_;
-    delete Blockly.Java.functionNames_;
-    Blockly.Java.variableDB_.reset();
-    return skeleton + "\n" + definitions.join('\n\n') + '\n\n\n' + code + "\n}\n";
+  // Convert the definitions dictionary into a list.
+  var definitions = [];
+  for (var name in Blockly.Java.definitions_) {
+    definitions.push(Blockly.Java.definitions_[name]);
+  }
+  // Clean up temporary data.
+  delete Blockly.Java.definitions_;
+  delete Blockly.Java.functionNames_;
+  Blockly.Java.variableDB_.reset();
+  return skeleton + "\n" + definitions.join('\n\n') + '\n\n\n' + code + "\n}\n";
 };
 
 /**
@@ -231,7 +240,7 @@ Blockly.Java.finish = function(code) {
  * @return {string} Legal line of code.
  */
 Blockly.Java.scrubNakedValue = function(line) {
-    return line + ';\n';
+  return line + ';\n';
 };
 
 /**
@@ -242,12 +251,12 @@ Blockly.Java.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Java.quote_ = function(string) {
-    // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
-    string = string.replace(/\\/g, '\\\\')
-        .replace(/\n/g, '\\\n')
-        .replace(/'/g, '\\\'');
-    return '\'' + string + '\'';
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
+  string = string.replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\\n')
+    .replace(/'/g, '\\\'');
+  return '\'' + string + '\'';
 };
 
 /**
@@ -260,39 +269,39 @@ Blockly.Java.quote_ = function(string) {
  * @private
  */
 Blockly.Java.scrub_ = function(block, code) {
-    var commentCode = '';
-    // Only collect comments for blocks that aren't inline.
-    if (!block.outputConnection || !block.outputConnection.targetConnection) {
-        // Collect comment for this block.
-        var comment = block.getCommentText();
-        comment = Blockly.utils.wrap(comment, Blockly.Java.COMMENT_WRAP - 3);
-        if (comment) {
-            if (block.getProcedureDef) {
-                // Use a comment block for function comments.
-                commentCode += '/**\n' +
-                    Blockly.Java.prefixLines(comment + '\n', ' * ') +
-                    ' */\n';
-            } else {
-                commentCode += Blockly.Java.prefixLines(comment + '\n', '// ');
-            }
-        }
-        // Collect comments for all value arguments.
-        // Don't collect comments for nested statements.
-        for (var i = 0; i < block.inputList.length; i++) {
-            if (block.inputList[i].type == Blockly.INPUT_VALUE) {
-                var childBlock = block.inputList[i].connection.targetBlock();
-                if (childBlock) {
-                    var comment = Blockly.Java.allNestedComments(childBlock);
-                    if (comment) {
-                        commentCode += Blockly.Java.prefixLines(comment, '// ');
-                    }
-                }
-            }
-        }
+  var commentCode = '';
+  // Only collect comments for blocks that aren't inline.
+  if (!block.outputConnection || !block.outputConnection.targetConnection) {
+    // Collect comment for this block.
+    var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, Blockly.Java.COMMENT_WRAP - 3);
+    if (comment) {
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '/**\n' +
+          Blockly.Java.prefixLines(comment + '\n', ' * ') +
+          ' */\n';
+      } else {
+        commentCode += Blockly.Java.prefixLines(comment + '\n', '// ');
+      }
     }
-    var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-    var nextCode = Blockly.Java.blockToCode(nextBlock);
-    return commentCode + code + nextCode;
+    // Collect comments for all value arguments.
+    // Don't collect comments for nested statements.
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
+        if (childBlock) {
+          var comment = Blockly.Java.allNestedComments(childBlock);
+          if (comment) {
+            commentCode += Blockly.Java.prefixLines(comment, '// ');
+          }
+        }
+      }
+    }
+  }
+  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  var nextCode = Blockly.Java.blockToCode(nextBlock);
+  return commentCode + code + nextCode;
 };
 
 /**
@@ -302,58 +311,58 @@ Blockly.Java.scrub_ = function(block, code) {
  * @param {number=} opt_delta Value to add.
  * @param {boolean=} opt_negate Whether to negate the value.
  * @param {number=} opt_order The highest order acting on this value.
- * @return {string|number}
+ * @return {string|number} result
  */
 Blockly.Java.getAdjusted = function(block, atId, opt_delta, opt_negate,
-                                          opt_order) {
-    var delta = opt_delta || 0;
-    var order = opt_order || Blockly.Java.ORDER_NONE;
-    if (block.workspace.options.oneBasedIndex) {
-        delta--;
-    }
-    var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
-    if (delta > 0) {
-        var at = Blockly.Java.valueToCode(block, atId,
-                Blockly.Java.ORDER_ADDITION) || defaultAtIndex;
-    } else if (delta < 0) {
-        var at = Blockly.Java.valueToCode(block, atId,
-                Blockly.Java.ORDER_SUBTRACTION) || defaultAtIndex;
-    } else if (opt_negate) {
-        var at = Blockly.Java.valueToCode(block, atId,
-                Blockly.Java.ORDER_UNARY_NEGATION) || defaultAtIndex;
-    } else {
-        var at = Blockly.Java.valueToCode(block, atId, order) ||
-            defaultAtIndex;
-    }
+                      opt_order) {
+  var delta = opt_delta || 0;
+  var order = opt_order || Blockly.Java.ORDER_NONE;
+  if (block.workspace.options.oneBasedIndex) {
+    delta--;
+  }
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  if (delta > 0) {
+    var at = Blockly.Java.valueToCode(block, atId,
+        Blockly.Java.ORDER_ADDITION) || defaultAtIndex;
+  } else if (delta < 0) {
+    var at = Blockly.Java.valueToCode(block, atId,
+        Blockly.Java.ORDER_SUBTRACTION) || defaultAtIndex;
+  } else if (opt_negate) {
+    var at = Blockly.Java.valueToCode(block, atId,
+        Blockly.Java.ORDER_UNARY_NEGATION) || defaultAtIndex;
+  } else {
+    var at = Blockly.Java.valueToCode(block, atId, order) ||
+      defaultAtIndex;
+  }
 
-    if (Blockly.isNumber(at)) {
-        // If the index is a naked number, adjust it right now.
-        at = parseFloat(at) + delta;
-        if (opt_negate) {
-            at = -at;
-        }
-    } else {
-        // If the index is dynamic, adjust it in code.
-        if (delta > 0) {
-            at = at + ' + ' + delta;
-            var innerOrder = Blockly.Java.ORDER_ADDITION;
-        } else if (delta < 0) {
-            at = at + ' - ' + -delta;
-            var innerOrder = Blockly.Java.ORDER_SUBTRACTION;
-        }
-        if (opt_negate) {
-            if (delta) {
-                at = '-(' + at + ')';
-            } else {
-                at = '-' + at;
-            }
-            var innerOrder = Blockly.Java.ORDER_UNARY_NEGATION;
-        }
-        innerOrder = Math.floor(innerOrder);
-        order = Math.floor(order);
-        if (innerOrder && order >= innerOrder) {
-            at = '(' + at + ')';
-        }
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseFloat(at) + delta;
+    if (opt_negate) {
+      at = -at;
     }
-    return at;
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = at + ' + ' + delta;
+      var innerOrder = Blockly.Java.ORDER_ADDITION;
+    } else if (delta < 0) {
+      at = at + ' - ' + -delta;
+      var innerOrder = Blockly.Java.ORDER_SUBTRACTION;
+    }
+    if (opt_negate) {
+      if (delta) {
+        at = '-(' + at + ')';
+      } else {
+        at = '-' + at;
+      }
+      var innerOrder = Blockly.Java.ORDER_UNARY_NEGATION;
+    }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
+    if (innerOrder && order >= innerOrder) {
+      at = '(' + at + ')';
+    }
+  }
+  return at;
 };
