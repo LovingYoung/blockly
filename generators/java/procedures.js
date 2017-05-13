@@ -45,6 +45,16 @@ Blockly.Java['procedures_defreturn'] = function(block) {
   }
   var returnValue = Blockly.Java.valueToCode(block, 'RETURN',
       Blockly.Java.ORDER_NONE) || '';
+
+  //Determine return type
+  var returnType = undefined;
+  if(returnValue === '') returnType = 'void';
+  else returnType = returnValue.split('-')[1] ? returnValue.split('-')[0] : returnValue.split('_')[0];
+
+  //Trim return value
+  returnValue = returnValue.split('-')[1] ? returnValue.split('-')[1] : returnValue.split('_')[1];
+
+  //make returnValue a whole sentence
   if (returnValue) {
     returnValue = '  return ' + returnValue + ';\n';
   }
@@ -53,8 +63,14 @@ Blockly.Java['procedures_defreturn'] = function(block) {
     args[i] = Blockly.Java.variableDB_.getName(block.arguments_[i],
       Blockly.Variables.NAME_TYPE);
   }
-  var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
-    branch + returnValue + '}';
+  for(var i = 0; i < args.length; i++){
+    //args[i] = args[i].split('-')[0] + ' ' + args[i].split('-')[1];
+    args[i] = args[i].split('-')[1]
+      ? args[i].split('-')[0] + ' ' + args[i].split('-')[1]
+      : args[i].split('_')[0] + ' ' + args[i].split('_')[1]
+    ;
+  }
+  var code = 'private ' + returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' + branch + returnValue + '}';
   code = Blockly.Java.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Java.definitions_['%' + funcName] = code;
@@ -73,7 +89,10 @@ Blockly.Java['procedures_callreturn'] = function(block) {
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.Java.valueToCode(block, 'ARG' + i,
-        Blockly.Java.ORDER_COMMA) || 'null';
+        Blockly.Java.ORDER_COMMA) || 'None';
+  }
+  for(var i = 0; i < args.length; i++){
+    args[i] = args[i].split('-')[1] || args[i].split('_')[1];
   }
   var code = funcName + '(' + args.join(', ') + ')';
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
@@ -86,7 +105,10 @@ Blockly.Java['procedures_callnoreturn'] = function(block) {
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.Java.valueToCode(block, 'ARG' + i,
-        Blockly.Java.ORDER_COMMA) || 'null';
+        Blockly.Java.ORDER_COMMA) || 'None';
+  }
+  for(var i = 0; i < args.length; i++){
+    args[i] = args[i].split('-')[1] || args[i].split('_')[1];
   }
   var code = funcName + '(' + args.join(', ') + ');\n';
   return code;
@@ -99,7 +121,7 @@ Blockly.Java['procedures_ifreturn'] = function(block) {
   var code = 'if (' + condition + ') {\n';
   if (block.hasReturnValue_) {
     var value = Blockly.Java.valueToCode(block, 'VALUE',
-        Blockly.Java.ORDER_NONE) || 'null';
+        Blockly.Java.ORDER_NONE) || 'None';
     code += '  return ' + value + ';\n';
   } else {
     code += '  return;\n';
