@@ -174,8 +174,21 @@ Blockly.Java.getPackage = function() {
 /**
  * Package, imports, class
  */
-var skeleton = "import example.maple\n" +
-  "class SDNSolution {\n";
+var skeleton =
+  "package org.opendaylight.mapleapp.impl;\n" +
+  "\n"+
+  "import org.opendaylight.maple.core.increment.app.MapleAppBase;\n" +
+  "import org.opendaylight.maple.core.increment.packet.Ethernet;\n" +
+  "import org.opendaylight.maple.core.increment.packet.IPv4;\n" +
+  "import org.opendaylight.maple.core.increment.tracetree.MaplePacket;\n" +
+  "import org.opendaylight.maple.core.increment.tracetree.Route;\n" +
+  "\n" +
+  "class SDNSolution extends MapleAppBase {\n";
+
+/**
+ * End of generator code
+ */
+var skeleton_end = "}";
 
 /**
  * Initialise the database of variable names.
@@ -231,7 +244,7 @@ Blockly.Java.finish = function(code) {
   delete Blockly.Java.definitions_;
   delete Blockly.Java.functionNames_;
   Blockly.Java.variableDB_.reset();
-  return skeleton + "\n" + definitions.join('\n') + '\n' + code + "\n}\n";
+  return skeleton + "\n" + definitions.join('\n') + '\n' + code + "\n" + skeleton_end +"\n";
 };
 
 /**
