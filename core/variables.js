@@ -217,32 +217,53 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
  */
-Blockly.Variables.createVariable = function(workspace, opt_callback) {
-  var promptAndCheckWithAlert = function(defaultName) {
-    Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
-      function(text) {
-        if (text) {
-          if (workspace.variableIndexOf(text) != -1) {
-            Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
-                text.toLowerCase()),
-                function() {
-                  promptAndCheckWithAlert(text);  // Recurse
-                });
-          } else {
-            workspace.createVariable(text);
-            if (opt_callback) {
-              opt_callback(text);
-            }
-          }
-        } else {
-          // User canceled prompt without a value.
-          if (opt_callback) {
-            opt_callback(null);
-          }
-        }
-      });
-  };
-  promptAndCheckWithAlert('');
+
+// Blockly.Variables.createVariable = function(workspace, opt_callback) {
+//   var promptAndCheckWithAlert = function(defaultName) {
+//     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
+//       function(text) {
+//         if (text) {
+//           if (workspace.variableIndexOf(text) != -1) {
+//             Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
+//                 text.toLowerCase()),
+//                 function() {
+//                   promptAndCheckWithAlert(text);  // Recurse
+//                 });
+//           } else {
+//             workspace.createVariable(text);
+//             if (opt_callback) {
+//               opt_callback(text);
+//             }
+//           }
+//         } else {
+//           // User canceled prompt without a value.
+//           if (opt_callback) {
+//             opt_callback(null);
+//           }
+//         }
+//       });
+//   };
+//   promptAndCheckWithAlert('');
+// };
+
+Blockly.Variables.createVariable = function (workspace, opt_callback) {
+  $("#myModal").modal();
+  $("#myModal").on('hidden.bs.modal', function (e) {
+    var confirm = $("#confirm_variable").prop('checked');
+    if(confirm){
+      var type = $("#variable_type").val();
+      var name = $("#variable_name").val();
+      var type_name = type + "-" + name;
+      workspace.createVariable(type_name);
+      if(opt_callback){
+        opt_callback(type_name);
+      }
+    } else {
+      if(opt_callback){
+        opt_callback(null);
+      }
+    }
+  });
 };
 
 /**
