@@ -33,7 +33,9 @@ Blockly.Java['variables_get'] = function(block) {
   // Variable getter.
   var code = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  return [code, Blockly.Java.ORDER_ATOMIC];
+  var varType;
+  [varType, code] = getTypeAndName(code);
+  return code;
 };
 
 Blockly.Java['variables_set'] = function(block) {
@@ -42,5 +44,7 @@ Blockly.Java['variables_set'] = function(block) {
       Blockly.Java.ORDER_ASSIGNMENT) || '0';
   var varName = Blockly.Java.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var varType;
+  [varType, varName] = getTypeAndName(varName);
   return varName + ' = ' + argument0 + ';\n';
 };

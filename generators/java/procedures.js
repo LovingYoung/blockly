@@ -49,10 +49,8 @@ Blockly.Java['procedures_defreturn'] = function(block) {
   //Determine return type
   var returnType = undefined;
   if(!returnValue || returnValue === '') returnType = 'void';
-  else returnType = returnValue.split('-')[1] ? returnValue.split('-')[0] : returnValue.split('_')[0];
-
-  //Trim return value
-  returnValue = returnValue.split('-')[1] ? returnValue.split('-')[1] : returnValue.split('_')[1];
+  else
+    [returnType, returnValue] = getTypeAndName(returnValue);
 
   //make returnValue a whole sentence
   if (returnValue) {
@@ -64,11 +62,10 @@ Blockly.Java['procedures_defreturn'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   }
   for(var i = 0; i < args.length; i++){
-    //args[i] = args[i].split('-')[0] + ' ' + args[i].split('-')[1];
-    args[i] = args[i].split('-')[1]
-      ? args[i].split('-')[0] + ' ' + args[i].split('-')[1]
-      : args[i].split('_')[0] + ' ' + args[i].split('_')[1]
-    ;
+    //args[i] = args[i].split('-')[0] + ' ' + args[i].split('-')[1]
+    var argType, argValue;
+    [argType, argValue] = getTypeAndName(args[i]);
+    args[i] = argType + ' ' + argValue;
   }
   var code = 'private ' + returnType + ' ' + funcName +
     '(' + args.join(', ') + ') {\n' + branch + (returnValue || '') + '}';
