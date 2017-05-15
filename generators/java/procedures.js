@@ -48,7 +48,7 @@ Blockly.Java['procedures_defreturn'] = function(block) {
 
   //Determine return type
   var returnType = undefined;
-  if(returnValue === '') returnType = 'void';
+  if(!returnValue || returnValue === '') returnType = 'void';
   else returnType = returnValue.split('-')[1] ? returnValue.split('-')[0] : returnValue.split('_')[0];
 
   //Trim return value
@@ -70,7 +70,7 @@ Blockly.Java['procedures_defreturn'] = function(block) {
       : args[i].split('_')[0] + ' ' + args[i].split('_')[1]
     ;
   }
-  var code = 'private ' + returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' + branch + returnValue + '}';
+  var code = 'private ' + returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' + branch + (returnValue || '') + '}';
   code = Blockly.Java.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Java.definitions_['%' + funcName] = code;
