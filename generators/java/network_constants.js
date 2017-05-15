@@ -14,5 +14,5 @@ Blockly.Java['network_static_ip'] = function(block) {
   var IP_2 = block.getFieldValue('IP_2');
   var IP_3 = block.getFieldValue('IP_3');
   var IP_4 = block.getFieldValue('IP_4');
-  return '\"' + IP_1 + '.' + IP_2 + '.' + IP_3 + '.' + IP_4 + '\"';
+  return "IPv4.toIPv4Address(" + '\"' + IP_1 + '.' + IP_2 + '.' + IP_3 + '.' + IP_4 + "\")";
 };
