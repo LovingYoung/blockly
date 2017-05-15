@@ -70,7 +70,8 @@ Blockly.Java['procedures_defreturn'] = function(block) {
       : args[i].split('_')[0] + ' ' + args[i].split('_')[1]
     ;
   }
-  var code = 'private ' + returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' + branch + (returnValue || '') + '}';
+  var code = 'private ' + returnType + ' ' + funcName +
+    '(' + args.join(', ') + ') {\n' + branch + (returnValue || '') + '}';
   code = Blockly.Java.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Java.definitions_['%' + funcName] = code;
