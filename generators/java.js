@@ -176,12 +176,12 @@ Blockly.Java.getPackage = function() {
  */
 var skeleton =
   "/*\n" +
-  "* Copyright © 2015 SNLAB and others.  All rights reserved.\n" +
-  "*\n" +
-  "* This program and the accompanying materials are made available under the\n" +
-  "* terms of the Eclipse Public License v1.0 which accompanies this distribution,\n" +
-  "* and is available at http://www.eclipse.org/legal/epl-v10.html\n" +
-  "*/\n\n" +
+  " * Copyright © 2015 SNLAB and others.  All rights reserved.\n" +
+  " *\n" +
+  " * This program and the accompanying materials are made available under the\n" +
+  " * terms of the Eclipse Public License v1.0 which accompanies this distribution,\n" +
+  " * and is available at http://www.eclipse.org/legal/epl-v10.html\n" +
+  " */\n\n" +
   "package org.opendaylight.mapleapp.impl;\n" +
   "\n"+
   "import org.opendaylight.maple.core.increment.app.MapleAppBase;\n" +
