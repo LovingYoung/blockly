@@ -247,8 +247,8 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 // };
 
 Blockly.Variables.createVariable = function (workspace, opt_callback) {
-  $("#myModal").modal();
-  $("#myModal").on('hidden.bs.modal', function (e) {
+  $("#VariableModal").modal();
+  $("#VariableModal").on('hidden.bs.modal', function (e) {
     var confirm = $("#confirm_variable").prop('checked');
     if(confirm){
       var type = $("#variable_type").val();
