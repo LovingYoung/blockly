@@ -36,3 +36,9 @@ Blockly.Java['network_IPv4DstIs'] = function(block) {
   var code = "pkt.IPv4DstIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Java['network_setRoute'] = function(block) {
+  var arg = Blockly.Java.statementToCode(block, "Route").trim();
+  var code = "pkt.setRoute(" + arg + ")";
+  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
+};

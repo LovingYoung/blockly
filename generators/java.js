@@ -189,6 +189,7 @@ var skeleton =
   "import org.opendaylight.maple.core.increment.packet.IPv4;\n" +
   "import org.opendaylight.maple.core.increment.tracetree.MaplePacket;\n" +
   "import org.opendaylight.maple.core.increment.tracetree.Route;\n" +
+  "import java.lang.*\n" +
   "\n" +
   "class SDNSolution extends MapleAppBase {\n";
 

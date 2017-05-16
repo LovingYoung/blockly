@@ -58,6 +58,8 @@ Blockly.Java['math_single'] = function(block) {
     arg = Blockly.Java.valueToCode(block, 'NUM',
         Blockly.Java.ORDER_NONE) || '0';
   }
+  var type;
+  [type, arg] = getTypeAndName(arg);
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
   switch (operator) {
@@ -126,9 +128,9 @@ Blockly.Java['math_constant'] = function(block) {
     'E': ['Math.E', Blockly.Java.ORDER_MEMBER],
     'GOLDEN_RATIO':
       ['(1 + Math.sqrt(5)) / 2', Blockly.Java.ORDER_DIVISION],
-    'SQRT2': ['Math.SQRT2', Blockly.Java.ORDER_MEMBER],
-    'SQRT1_2': ['Math.SQRT1_2', Blockly.Java.ORDER_MEMBER],
-    'INFINITY': ['Infinity', Blockly.Java.ORDER_ATOMIC]
+    'SQRT2': ['Math.sqrt(2)', Blockly.Java.ORDER_MEMBER],
+    'SQRT1_2': ['Math.sqrt(1.0/2)', Blockly.Java.ORDER_MEMBER],
+    'INFINITY': ['Double.POSITIVE_INFINITY', Blockly.Java.ORDER_ATOMIC]
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
@@ -137,7 +139,7 @@ Blockly.Java['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   var number_to_check = Blockly.Java.valueToCode(block, 'NUMBER_TO_CHECK',
-      Blockly.Java.ORDER_MODULUS) || '0';
+      Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
   if (dropdown_property == 'PRIME') {
@@ -184,7 +186,7 @@ Blockly.Java['math_number_property'] = function(block) {
       break;
     case 'DIVISIBLE_BY':
       var divisor = Blockly.Java.valueToCode(block, 'DIVISOR',
-          Blockly.Java.ORDER_MODULUS) || '0';
+          Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
       code = number_to_check + ' % ' + divisor + ' == 0';
       break;
   }
@@ -339,11 +341,11 @@ Blockly.Java['math_on_list'] = function(block) {
 Blockly.Java['math_modulo'] = function(block) {
   // Remainder computation.
   var argument0 = Blockly.Java.valueToCode(block, 'DIVIDEND',
-      Blockly.Java.ORDER_MODULUS) || '0';
+      Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
   var argument1 = Blockly.Java.valueToCode(block, 'DIVISOR',
-      Blockly.Java.ORDER_MODULUS) || '0';
+      Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
   var code = argument0 + ' % ' + argument1;
-  return [code, Blockly.Java.ORDER_MODULUS];
+  return [code, Blockly.Java.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Java['math_constrain'] = function(block) {
