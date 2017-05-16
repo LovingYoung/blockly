@@ -31,7 +31,7 @@ goog.require('Blockly.Java');
 
 Blockly.Java['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['[]', Blockly.Java.ORDER_ATOMIC];
+  return ['{}', Blockly.Java.ORDER_ATOMIC];
 };
 
 Blockly.Java['lists_create_with'] = function(block) {
@@ -41,7 +41,7 @@ Blockly.Java['lists_create_with'] = function(block) {
     elements[i] = Blockly.Java.valueToCode(block, 'ADD' + i,
         Blockly.Java.ORDER_COMMA) || 'null';
   }
-  var code = '[' + elements.join(', ') + ']';
+  var code = '{' + elements.join(', ') + '}';
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
@@ -51,7 +51,7 @@ Blockly.Java['lists_repeat'] = function(block) {
     'listsRepeat',
     ['function ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
     '(value, n) {',
-      '  var array = [];',
+      '  var array = {};',
       '  for (var i = 0; i < n; i++) {',
       '    array[i] = value;',
       '  }',
@@ -68,14 +68,14 @@ Blockly.Java['lists_repeat'] = function(block) {
 Blockly.Java['lists_length'] = function(block) {
   // String or array length.
   var list = Blockly.Java.valueToCode(block, 'VALUE',
-      Blockly.Java.ORDER_MEMBER) || '[]';
-  return [list + '.length', Blockly.Java.ORDER_MEMBER];
+      Blockly.Java.ORDER_MEMBER) || '{}';
+  return [list + '.length()', Blockly.Java.ORDER_MEMBER];
 };
 
 Blockly.Java['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   var list = Blockly.Java.valueToCode(block, 'VALUE',
-      Blockly.Java.ORDER_MEMBER) || '[]';
+      Blockly.Java.ORDER_MEMBER) || '{}';
   return ['!' + list + '.length', Blockly.Java.ORDER_LOGICAL_NOT];
 };
 
@@ -86,7 +86,7 @@ Blockly.Java['lists_indexOf'] = function(block) {
   var item = Blockly.Java.valueToCode(block, 'FIND',
       Blockly.Java.ORDER_NONE) || '\'\'';
   var list = Blockly.Java.valueToCode(block, 'VALUE',
-      Blockly.Java.ORDER_MEMBER) || '[]';
+      Blockly.Java.ORDER_MEMBER) || '{}';
   var code = list + '.' + operator + '(' + item + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Blockly.Java.ORDER_ADDITION];
@@ -101,7 +101,7 @@ Blockly.Java['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var listOrder = (where == 'RANDOM') ? Blockly.Java.ORDER_COMMA :
     Blockly.Java.ORDER_MEMBER;
-  var list = Blockly.Java.valueToCode(block, 'VALUE', listOrder) || '[]';
+  var list = Blockly.Java.valueToCode(block, 'VALUE', listOrder) || '{}';
 
   switch (where) {
     case ('FIRST'):
@@ -177,7 +177,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   var list = Blockly.Java.valueToCode(block, 'LIST',
-      Blockly.Java.ORDER_MEMBER) || '[]';
+      Blockly.Java.ORDER_MEMBER) || '{}';
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var value = Blockly.Java.valueToCode(block, 'TO',
@@ -205,7 +205,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
     case ('LAST'):
       if (mode == 'SET') {
         var code = cacheList();
-        code += list + '[' + list + '.length - 1] = ' + value + ';\n';
+        code += list + '{' + list + '.length() - 1} = ' + value + ';\n';
         return code;
       } else if (mode == 'INSERT') {
         return list + '.push(' + value + ');\n';
@@ -214,7 +214,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
     case ('FROM_START'):
       var at = Blockly.Java.getAdjusted(block, 'AT');
       if (mode == 'SET') {
-        return list + '[' + at + '] = ' + value + ';\n';
+        return list + '{' + at + '} = ' + value + ';\n';
       } else if (mode == 'INSERT') {
         return list + '.splice(' + at + ', 0, ' + value + ');\n';
       }
@@ -224,10 +224,10 @@ Blockly.Java['lists_setIndex'] = function(block) {
         Blockly.Java.ORDER_SUBTRACTION);
       var code = cacheList();
       if (mode == 'SET') {
-        code += list + '[' + list + '.length - ' + at + '] = ' + value + ';\n';
+        code += list + '{' + list + '.length - ' + at + '} = ' + value + ';\n';
         return code;
       } else if (mode == 'INSERT') {
-        code += list + '.splice(' + list + '.length - ' + at + ', 0, ' + value +
+        code += list + '.splice(' + list + '.length() - ' + at + ', 0, ' + value +
           ');\n';
         return code;
       }
@@ -239,7 +239,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
         '.length);\n';
       if (mode == 'SET') {
-        code += list + '[' + xVar + '] = ' + value + ';\n';
+        code += list + '{' + xVar + '} = ' + value + ';\n';
         return code;
       } else if (mode == 'INSERT') {
         code += list + '.splice(' + xVar + ', 0, ' + value + ');\n';
@@ -273,7 +273,7 @@ Blockly.Java.lists.getIndex_ = function(listName, where, opt_at) {
 Blockly.Java['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Java.valueToCode(block, 'LIST',
-      Blockly.Java.ORDER_MEMBER) || '[]';
+      Blockly.Java.ORDER_MEMBER) || '{}';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   if (where1 == 'FIRST' && where2 == 'LAST') {
@@ -304,10 +304,10 @@ Blockly.Java['lists_getSublist'] = function(block) {
       case 'FROM_END':
         var at2 = Blockly.Java.getAdjusted(block, 'AT2', 0, false,
           Blockly.Java.ORDER_SUBTRACTION);
-        at2 = list + '.length - ' + at2;
+        at2 = list + '.length() - ' + at2;
         break;
       case 'LAST':
-        var at2 = list + '.length';
+        var at2 = list + '.length()';
         break;
       default:
         throw 'Unhandled option (lists_getSublist).';
@@ -345,7 +345,7 @@ Blockly.Java['lists_getSublist'] = function(block) {
 Blockly.Java['lists_sort'] = function(block) {
   // Block for sorting a list.
   var list = Blockly.Java.valueToCode(block, 'LIST',
-      Blockly.Java.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.Java.ORDER_FUNCTION_CALL) || '{}';
   var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var getCompareFunctionName = Blockly.Java.provideFunction_(
@@ -383,7 +383,7 @@ Blockly.Java['lists_split'] = function(block) {
     var functionName = 'split';
   } else if (mode == 'JOIN') {
     if (!input) {
-      input = '[]';
+      input = '{}';
     }
     var functionName = 'join';
   } else {
@@ -396,7 +396,7 @@ Blockly.Java['lists_split'] = function(block) {
 Blockly.Java['lists_reverse'] = function(block) {
   // Block for reversing a list.
   var list = Blockly.Java.valueToCode(block, 'LIST',
-      Blockly.Java.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.Java.ORDER_FUNCTION_CALL) || '{}';
   var code = list + '.slice().reverse()';
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
