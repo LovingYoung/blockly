@@ -72,6 +72,7 @@ Blockly.Names.prototype.reset = function() {
  * @return {string} An entity name legal for the exported language.
  */
 Blockly.Names.prototype.getName = function(name, type) {
+  return name;
   var normalized = name.toLowerCase() + '_' + type;
   var prefix = (type == Blockly.Variables.NAME_TYPE) ?
       this.variablePrefix_ : '';
