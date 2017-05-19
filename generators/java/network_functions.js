@@ -39,6 +39,26 @@ Blockly.Java['network_IPv4DstIs'] = function(block) {
 
 Blockly.Java['network_setRoute'] = function(block) {
   var arg = Blockly.Java.statementToCode(block, "Route").trim();
-  var code = "pkt.setRoute(" + arg + ")";
+  var code = "pkt.setRoute(" + arg + ");";
+  return code;
+};
+
+Blockly.Java['network_TCPSrcPortIs'] = function (block) {
+  var arg = Blockly.Java.statementToCode(block, "Port").trim();
+  var code = "pkt.TCPSrcPortIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Java['network_TCPDstPortIs'] = function (block) {
+  var arg = Blockly.Java.statementToCode(block, "Port").trim();
+  var code = "pkt.TCPDstPortIs(" + arg + ")";
+  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
+};
+
+Blockly.Java['network_DROP'] = function (block) {
+  return 'Route.DROP';
+};
+
+Blockly.Java['network_PassToNext'] = function (block) {
+  return "passToNext(pkt);"
+}

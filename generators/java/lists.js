@@ -41,7 +41,7 @@ Blockly.Java['lists_create_with'] = function(block) {
     elements[i] = Blockly.Java.valueToCode(block, 'ADD' + i,
         Blockly.Java.ORDER_COMMA) || 'null';
   }
-  var code = '{' + elements.join(', ') + '}';
+  var code = 'new String[]{' + elements.join(', ') + '}';
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 

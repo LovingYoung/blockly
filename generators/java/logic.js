@@ -16,14 +16,13 @@ Blockly.Java['controls_if'] = function(block) {
         Blockly.Java.ORDER_NONE) || 'false';
     branchCode = Blockly.Java.statementToCode(block, 'DO' + n);
     code += (n > 0 ? ' else ' : '') +
-      'if (' + conditionCode + ') {\n' + branchCode + '}';
-
+      'if (' + conditionCode + ') {\n' + branchCode + '\n}';
     ++n;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE')) {
     branchCode = Blockly.Java.statementToCode(block, 'ELSE');
-    code += ' else {\n' + branchCode + '}';
+    code += ' else {\n' + branchCode + '\n}';
   }
   return code + '\n';
 };

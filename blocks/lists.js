@@ -143,6 +143,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+    this.setInputsInline(true);
   },
   /**
    * Create XML to represent list inputs.
@@ -242,7 +243,7 @@ Blockly.Blocks['lists_create_with'] = {
       if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
-          input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
+          input.appendField("Static Route");
         }
       }
     }
