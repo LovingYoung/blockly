@@ -35,7 +35,7 @@ Blockly.Java['variables_get'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   var varType;
   [varType, code] = getTypeAndName(code);
-  return code;
+  return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
 Blockly.Java['variables_set'] = function(block) {

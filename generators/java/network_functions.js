@@ -26,39 +26,39 @@ Blockly.Java['network_onPacket'] = function(block) {
 };
 
 Blockly.Java['network_IPv4SrcIs'] = function(block) {
-  var arg = Blockly.Java.statementToCode(block, "IP").trim();
+  var arg = Blockly.Java.valueToCode(block, "IP", Blockly.Java.ORDER_NONE);
   var code = "pkt.IPv4SrcIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['network_IPv4DstIs'] = function(block) {
-  var arg = Blockly.Java.statementToCode(block, "IP").trim();
+  var arg = Blockly.Java.valueToCode(block, "IP", Blockly.Java.ORDER_NONE);
   var code = "pkt.IPv4DstIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['network_setRoute'] = function(block) {
-  var arg = Blockly.Java.statementToCode(block, "Route").trim();
+  var arg = Blockly.Java.valueToCode(block, "Route", Blockly.Java.ORDER_NONE);
   var code = "pkt.setRoute(" + arg + ");";
   return code;
 };
 
 Blockly.Java['network_TCPSrcPortIs'] = function (block) {
-  var arg = Blockly.Java.statementToCode(block, "Port").trim();
+  var arg = Blockly.Java.valueToCode(block, "Port", Blockly.Java.ORDER_NONE);
   var code = "pkt.TCPSrcPortIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['network_TCPDstPortIs'] = function (block) {
-  var arg = Blockly.Java.statementToCode(block, "Port").trim();
+  var arg = Blockly.Java.valueToCode(block, "Port", Blockly.Java.ORDER_NONE);
   var code = "pkt.TCPDstPortIs(" + arg + ")";
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['network_DROP'] = function (block) {
-  return 'Route.DROP';
+  return ['Route.DROP', Blockly.Java.ORDER_ATOMIC];
 };
 
 Blockly.Java['network_PassToNext'] = function (block) {
   return "passToNext(pkt);"
-}
+};
