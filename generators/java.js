@@ -290,7 +290,7 @@ Blockly.Java.quote_ = function(string) {
  * @return {string} Java code with comments and subsequent blocks added.
  * @private
  */
-Blockly.Java.scrub_ = function(block, code) {
+Blockly.Java.scrub_ = function(block, code, info) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -322,7 +322,12 @@ Blockly.Java.scrub_ = function(block, code) {
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.Java.blockToCode(nextBlock);
+  var nextCode, nextInfo;
+  [nextCode, nextInfo] = Blockly.Java.blockToCode(nextBlock);
+  if(info !== undefined && nextInfo !== undefined && typeof(nextInfo) === 'object'){
+    Object.assign(info, nextInfo);
+    return [commentCode + code + nextCode, info];
+  }
   return commentCode + code + nextCode;
 };
 

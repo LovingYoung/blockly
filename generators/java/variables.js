@@ -46,5 +46,5 @@ Blockly.Java['variables_set'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var varType;
   [varType, varName] = getTypeAndName(varName);
-  return varName + ' = ' + argument0 + ';\n';
+  return [varName + ' = ' + argument0 + ';\n', {}];
 };

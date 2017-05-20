@@ -11,7 +11,8 @@ goog.provide("Blockly.Java.network_functions");
 
 Blockly.Java['network_onPacket'] = function(block) {
   var funcName = 'onPacket';
-  var branch = Blockly.Java.statementToCode(block, 'DO');
+  var branch, info;
+  [branch, info] = Blockly.Java.statementToCode(block, 'DO');
   if (Blockly.Java.STATEMENT_PREFIX) {
     branch = Blockly.Java.prefixLines(
         Blockly.Java.STATEMENT_PREFIX.replace(/%1/g,
@@ -22,7 +23,7 @@ Blockly.Java['network_onPacket'] = function(block) {
         '\'' + block.id + '\'') + branch;
   }
   var code = "@Override\npublic void "+ funcName + " (MaplePacket pkt) { \n" + branch + '}';
-  return code;
+  return [code, info];
 };
 
 Blockly.Java['network_IPv4SrcIs'] = function(block) {

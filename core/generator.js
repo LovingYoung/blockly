@@ -97,8 +97,11 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   var code = [];
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
+  var info = {};
   for (var x = 0, block; block = blocks[x]; x++) {
-    var line = this.blockToCode(block);
+    var line, info_tmp;
+    [line, info_tmp] = this.blockToCode(block);
+    Object.assign(info, info_tmp);
     if (goog.isArray(line)) {
       // Value blocks return tuples of code and operator order.
       // Top-level blocks don't care about operator order.
@@ -165,7 +168,7 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  */
 Blockly.Generator.prototype.blockToCode = function(block) {
   if (!block) {
-    return '';
+    return ['', {}];
   }
   if (block.disabled) {
     // Skip past this block if it is disabled.
@@ -180,19 +183,20 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current prefered method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
-  var code = func.call(block, block);
-  if (goog.isArray(code)) {
+  var code, info;
+  [code, info] = func.call(block, block);
+  if (typeof(info) == "number") {
     // Value blocks return tuples of code and operator order.
     goog.asserts.assert(block.outputConnection,
         'Expecting string from statement block "%s".', block.type);
-    return [this.scrub_(block, code[0]), code[1]];
-  } else if (goog.isString(code)) {
+    return [this.scrub_(block, code), info];
+  } else if (typeof(info) == 'object') {
     var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     if (this.STATEMENT_PREFIX) {
       code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') +
           code;
     }
-    return this.scrub_(block, code);
+    return this.scrub_(block, code, info);
   } else if (code === null) {
     // Block has handled code generation itself.
     return '';
@@ -279,7 +283,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
  */
 Blockly.Generator.prototype.statementToCode = function(block, name) {
   var targetBlock = block.getInputTargetBlock(name);
-  var code = this.blockToCode(targetBlock);
+  var code, info;
+  [code, info] = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   goog.asserts.assertString(code, 'Expecting code from statement block "%s".',
@@ -287,7 +292,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }
-  return code;
+  return [code, info];
 };
 
 /**
