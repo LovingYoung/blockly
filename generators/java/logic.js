@@ -10,21 +10,26 @@ goog.require('Blockly.Java');
 Blockly.Java['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var code = '', branchCode, conditionCode;
+  var code = '', branchCode, conditionCode, info, info_whole = {};
   do {
     conditionCode = Blockly.Java.valueToCode(block, 'IF' + n,
         Blockly.Java.ORDER_NONE) || 'false';
-    branchCode = Blockly.Java.statementToCode(block, 'DO' + n);
+    [branchCode, info] = Blockly.Java.statementToCode(block, 'DO' + n);
     code += (n > 0 ? ' else ' : '') +
-      'if (' + conditionCode + ') {\n' + branchCode + '\n}';
+      'if (' + conditionCode + ') {\n' + branchCode + '}';
     ++n;
+    info = infoModify(info, 1);
+    Object.assign(info_whole, info);
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE')) {
-    branchCode = Blockly.Java.statementToCode(block, 'ELSE');
-    code += ' else {\n' + branchCode + '\n}';
+    code += ' else {\n';
+    [branchCode, info] = Blockly.Java.statementToCode(block, 'ELSE');
+    info = infoModify(info, getNumberOfBreaks(code));
+    Object.assign(info_whole, info);
+    code += branchCode + '}';
   }
-  return code + '\n';
+  return [code + '\n', info_whole];
 };
 
 Blockly.Java['controls_ifelse'] = Blockly.Java['controls_if'];

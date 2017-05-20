@@ -191,7 +191,7 @@ var skeleton =
   "import org.opendaylight.maple.core.increment.tracetree.Route;\n" +
   "import java.lang.*;\n" +
   "\n" +
-  "public class SDNSolution extends MapleAppBase {\n";
+  "public class SDNSolution extends MapleAppBase {\n\n";
 
 /**
  * End of generator code
@@ -252,7 +252,9 @@ Blockly.Java.finish = function(code) {
   delete Blockly.Java.definitions_;
   delete Blockly.Java.functionNames_;
   Blockly.Java.variableDB_.reset();
-  return skeleton + "\n" + definitions.join('\n') + '\n' + code + "\n" + skeleton_end +"\n";
+  convert_info = infoModify(convert_info, getNumberOfBreaks(skeleton));
+  convert_info = infoModify(convert_info, getNumberOfBreaks(definitions.join('\n')) + 1);
+  return skeleton + definitions.join('\n') + '\n' + code + "\n" + skeleton_end +"\n";
 };
 
 /**

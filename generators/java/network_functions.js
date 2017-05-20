@@ -22,6 +22,8 @@ Blockly.Java['network_onPacket'] = function(block) {
     branch = Blockly.Java.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + block.id + '\'') + branch;
   }
+  info = infoModify(info, 2);
+  info[2] = {type: "onPacket", id: block.id};
   var code = "@Override\npublic void "+ funcName + " (MaplePacket pkt) { \n" + branch + '}';
   return [code, info];
 };
@@ -40,8 +42,10 @@ Blockly.Java['network_IPv4DstIs'] = function(block) {
 
 Blockly.Java['network_setRoute'] = function(block) {
   var arg = Blockly.Java.valueToCode(block, "Route", Blockly.Java.ORDER_NONE);
-  var code = "pkt.setRoute(" + arg + ");";
-  return code;
+  var code = "pkt.setRoute(" + arg + ");\n";
+  var info = {};
+  info[1] = {type: "Set Route", id: block.id};
+  return [code, info];
 };
 
 Blockly.Java['network_TCPSrcPortIs'] = function (block) {
@@ -61,5 +65,6 @@ Blockly.Java['network_DROP'] = function (block) {
 };
 
 Blockly.Java['network_PassToNext'] = function (block) {
-  return "passToNext(pkt);"
+  statement_lines += 1;
+  return ["passToNext(pkt);", {1:{type: "Pass To Next", id: block.id}}];
 };

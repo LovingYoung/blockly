@@ -97,11 +97,11 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   var code = [];
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
-  var info = {};
+  convert_info = {};
   for (var x = 0, block; block = blocks[x]; x++) {
-    var line, info_tmp;
-    [line, info_tmp] = this.blockToCode(block);
-    Object.assign(info, info_tmp);
+    var line, info;
+    [line, info] = this.blockToCode(block);
+    Object.assign(convert_info, info);
     if (goog.isArray(line)) {
       // Value blocks return tuples of code and operator order.
       // Top-level blocks don't care about operator order.
