@@ -33,7 +33,8 @@ Blockly.Java['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.Java.variableDB_.getName(
     block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Java.statementToCode(block, 'STACK');
+  var branch, info;
+  [branch, info] = Blockly.Java.statementToCode(block, 'STACK');
   if (Blockly.Java.STATEMENT_PREFIX) {
     branch = Blockly.Java.prefixLines(
         Blockly.Java.STATEMENT_PREFIX.replace(/%1/g,
@@ -46,11 +47,13 @@ Blockly.Java['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.Java.valueToCode(block, 'RETURN',
       Blockly.Java.ORDER_NONE) || '';
 
+  info = infoModify(info, 1);
+
   //Determine return type
   var returnType = undefined;
   if(!returnValue || returnValue === '') returnType = 'void';
   else
-    [returnType, returnValue] = getTypeAndName(returnValue);
+    returnType = workspace.getTypeOfVariable(returnValue);
 
   //make returnValue a whole sentence
   if (returnValue) {
@@ -64,15 +67,16 @@ Blockly.Java['procedures_defreturn'] = function(block) {
   for(var i = 0; i < args.length; i++){
     //args[i] = args[i].split('-')[0] + ' ' + args[i].split('-')[1]
     var argType, argValue;
-    [argType, argValue] = getTypeAndName(args[i]);
+    argType = workspace.getTypeOfVariable(args[i]);
     args[i] = argType + ' ' + argValue;
   }
   var code = 'private ' + returnType + ' ' + funcName +
     '(' + args.join(', ') + ') {\n' + branch + (returnValue || '') + '}';
-  code = Blockly.Java.scrub_(block, code);
+  [code, info] = Blockly.Java.scrub_(block, code, info);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Java.definitions_['%' + funcName] = code;
-  return null;
+  Blockly.Java.definitionsInfo_['%' + funcName] = info;
+  return [null, {}];
 };
 
 // Defining a procedure without a return value uses the same generator as

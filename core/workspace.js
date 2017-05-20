@@ -74,12 +74,17 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.blockDB_ = Object.create(null);
-  /*
+  /**
    * @type {!Array.<string>}
    * A list of all of the named variables in the workspace, including variables
    * that are not currently in use.
    */
   this.variableList = [];
+  /**
+   * @type {object}
+   * A map of all of the named variables and its type.
+   */
+  this.variableTypeMap = {};
 };
 
 /**
@@ -273,6 +278,46 @@ Blockly.Workspace.prototype.createVariable = function(name) {
 };
 
 /**
+ * Create a type with variable
+ * @param {string} name The variable name
+ * @param {string} type The type of variable
+ */
+Blockly.Workspace.prototype.createTypeOfVariable = function(name, type) {
+  var index = this.variableIndexOf(name);
+  if(index == -1) {
+    this.variableList.push(name);
+  }
+  this.variableTypeMap[name] = type;
+};
+
+/**
+ * Get the type of variable
+ * @param {string} name the variable name
+ * @return {string} type of the variable
+ */
+Blockly.Workspace.prototype.getTypeOfVariable = function(name) {
+  if(this.variableTypeMap[name] !== undefined) return this.variableTypeMap[name];
+  var isNumber = function (varName) {
+    var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+    for(var i = 0; i < varName.length; i++){
+      if(! varName[i] in digits) return false;
+    }
+    return true;
+  };
+  var isDouble = function (varName) {
+    return varName.includes('.');
+  };
+  if(isNumber(name)){
+    if(isDouble(name)){
+      return "double";
+    } else {
+      return "int";
+    }
+  }
+  return "String";
+};
+
+/**
  * Find all the uses of a named variable.
  * @param {string} name Name of variable.
  * @return {!Array.<!Blockly.Block>} Array of block usages.
@@ -306,6 +351,7 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
   if (variableIndex == -1) {
     return;
   }
+  delete this.variableTypeMap[name];
   // Check whether this variable is a function parameter before deleting.
   var uses = this.getVariableUses(name);
   for (var i = 0, block; block = uses[i]; i++) {

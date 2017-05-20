@@ -185,6 +185,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // argument to func.call, which becomes the first parameter to the generator.
   var code, info;
   [code, info] = func.call(block, block);
+  if(code == null) return ['', info];
   if (typeof(info) == "number") {
     // Value blocks return tuples of code and operator order.
     goog.asserts.assert(block.outputConnection,

@@ -58,8 +58,7 @@ Blockly.Java['math_single'] = function(block) {
     arg = Blockly.Java.valueToCode(block, 'NUM',
         Blockly.Java.ORDER_NONE) || '0';
   }
-  var type;
-  [type, arg] = getTypeAndName(arg);
+  var type = workspace.getTypeOfVariable(arg);
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
   switch (operator) {

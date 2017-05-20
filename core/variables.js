@@ -246,17 +246,17 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 //   promptAndCheckWithAlert('');
 // };
 
-Blockly.Variables.createVariable = function (workspace, opt_callback) {
+Blockly.Variables.createVariable = function(workspace, opt_callback) {
   $("#VariableModal").modal();
-  $("#VariableModal").on('hidden.bs.modal', function (e) {
+  $("#VariableModal").on('hidden.bs.modal', function(e) {
     var confirm = $("#confirm_variable").prop('checked');
     if(confirm){
       var type = $("#variable_type").val();
       var name = $("#variable_name").val();
-      var type_name = type + "-" + name;
-      workspace.createVariable(type_name);
+      workspace.createVariable(name);
+      workspace.createTypeOfVariable(name, type);
       if(opt_callback){
-        opt_callback(type_name);
+        opt_callback(name);
       }
     } else {
       if(opt_callback){

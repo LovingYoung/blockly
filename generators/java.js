@@ -191,7 +191,7 @@ var skeleton =
   "import org.opendaylight.maple.core.increment.tracetree.Route;\n" +
   "import java.lang.*;\n" +
   "\n" +
-  "public class SDNSolution extends MapleAppBase {\n\n";
+  "public class SDNSolution extends MapleAppBase {\n";
 
 /**
  * End of generator code
@@ -205,6 +205,7 @@ var skeleton_end = "}";
 Blockly.Java.init = function(workspace) {
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Java.definitions_ = Object.create(null);
+  Blockly.Java.definitionsInfo_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
   // to actual function names (to avoid collisions with user functions).
   Blockly.Java.functionNames_ = Object.create(null);
@@ -222,17 +223,13 @@ Blockly.Java.init = function(workspace) {
   var variables = workspace.variableList;
   if (variables.length) {
     for (var i = 0; i < variables.length; i++) {
-      // defvars[i] = Blockly.Java.variableDB_.getName(variables[i], Blockly.Variables.NAME_TYPE);
-      var split = variables[i].split('-');
-      var type = split[0]; var name = split[1];
-      Blockly.Java.blocklyTypes_[name] = type;
+      defvars[i] = Blockly.Java.variableDB_.getName(variables[i], Blockly.Variables.NAME_TYPE);
     }
     // Blockly.Java.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
     Blockly.Java.definitions_['variables'] = '';
-    defvars = Object.keys(Blockly.Java.blocklyTypes_);
     for(var i = 0; i < defvars.length; i++){
       Blockly.Java.definitions_['variables'] +=
-        ("private " + Blockly.Java.blocklyTypes_[defvars[i]] + ' ' + defvars[i] +';\n');
+        ("private " + workspace.getTypeOfVariable(defvars[i]) + ' ' + defvars[i] +';\n');
     }
   }
 };
@@ -243,18 +240,25 @@ Blockly.Java.init = function(workspace) {
  * @return {string} Completed code.
  */
 Blockly.Java.finish = function(code) {
-  // Convert the definitions dictionary into a list.
-  var definitions = [];
-  for (var name in Blockly.Java.definitions_) {
-    definitions.push(Blockly.Java.definitions_[name]);
+  Blockly.Java.variableDB_.reset();
+  var retCode = skeleton;
+  var list = Object.keys(Blockly.Java.definitions_);
+  var info_temp = Object.create(null);
+  for(var i = 0; i < list.length; i++){
+    if(Blockly.Java.definitionsInfo_[list[i]] !== undefined){
+      Blockly.Java.definitionsInfo_[list[i]] = infoModify(Blockly.Java.definitionsInfo_[list[i]], getNumberOfBreaks(retCode));
+      Object.assign(info_temp, Blockly.Java.definitionsInfo_[list[i]]);
+    }
+    retCode += (Blockly.Java.definitions_[list[i]] + "\n");
   }
+  convert_info = infoModify(convert_info, getNumberOfBreaks(retCode));
+  Object.assign(convert_info, info_temp);
+  retCode += (code + "\n" + skeleton_end + "\n");
   // Clean up temporary data.
   delete Blockly.Java.definitions_;
   delete Blockly.Java.functionNames_;
-  Blockly.Java.variableDB_.reset();
-  convert_info = infoModify(convert_info, getNumberOfBreaks(skeleton));
-  convert_info = infoModify(convert_info, getNumberOfBreaks(definitions.join('\n')) + 1);
-  return skeleton + definitions.join('\n') + '\n' + code + "\n" + skeleton_end +"\n";
+  delete Blockly.Java.definitionsInfo_;
+  return retCode;
 };
 
 /**
@@ -328,6 +332,7 @@ Blockly.Java.scrub_ = function(block, code, info) {
   [nextCode, nextInfo] = Blockly.Java.blockToCode(nextBlock);
   if(info !== undefined && nextInfo !== undefined && typeof(nextInfo) === 'object'){
     Object.assign(info, nextInfo);
+    info = infoModify(info, getNumberOfBreaks(commentCode));
     return [commentCode + code + nextCode, info];
   }
   return commentCode + code + nextCode;
