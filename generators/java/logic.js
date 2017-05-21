@@ -15,14 +15,18 @@ Blockly.Java['controls_if'] = function(block) {
     conditionCode = Blockly.Java.valueToCode(block, 'IF' + n,
         Blockly.Java.ORDER_NONE) || 'false';
     [branchCode, info] = Blockly.Java.statementToCode(block, 'DO' + n);
+    info = infoModify(info, getNumberOfBreaks(code) + 1);
+    info[getNumberOfBreaks(code) + 1] = {type: "if", id: block.id};
+    Object.assign(info_whole, info);
+    info = {};
     code += (n > 0 ? ' else ' : '') +
       'if (' + conditionCode + ') {\n' + branchCode + '}';
     ++n;
-    info = infoModify(info, 1);
-    Object.assign(info_whole, info);
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE')) {
+    info[getNumberOfBreaks(code) + 1] = {type: "if", id: block.id};
+    Object.assign(info_whole, info);
     code += ' else {\n';
     [branchCode, info] = Blockly.Java.statementToCode(block, 'ELSE');
     info = infoModify(info, getNumberOfBreaks(code));
