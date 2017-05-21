@@ -331,8 +331,9 @@ Blockly.Java.scrub_ = function(block, code, info) {
   var nextCode, nextInfo;
   [nextCode, nextInfo] = Blockly.Java.blockToCode(nextBlock);
   if(info !== undefined && nextInfo !== undefined && typeof(nextInfo) === 'object'){
+    nextInfo = infoModify(nextInfo, getNumberOfBreaks(commentCode + code));
     Object.assign(info, nextInfo);
-    info = infoModify(info, getNumberOfBreaks(commentCode));
+    info = infoModify(info, getNumberOfBreaks(commentCode)); //for functions comments
     return [commentCode + code + nextCode, info];
   }
   return commentCode + code + nextCode;
