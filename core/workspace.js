@@ -298,9 +298,16 @@ Blockly.Workspace.prototype.createTypeOfVariable = function(name, type) {
 Blockly.Workspace.prototype.getTypeOfVariable = function(name) {
   if(this.variableTypeMap[name] !== undefined) return this.variableTypeMap[name];
   var isNumber = function (varName) {
-    var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+    var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    var signs = ['+', '-', '*', '/'];
     for(var i = 0; i < varName.length; i++){
-      if(! varName[i] in digits) return false;
+      if(varName[i] in digits) continue;
+      if(varName[i] === '+') continue;
+      if(varName[i] === '-') continue;
+      if(varName[i] === '*') continue;
+      if(varName[i] === '/') continue;
+      if(varName[i] === ' ') continue;
+      return false;
     }
     return true;
   };
