@@ -65,6 +65,5 @@ Blockly.Java['network_DROP'] = function (block) {
 };
 
 Blockly.Java['network_PassToNext'] = function (block) {
-  statement_lines += 1;
   return ["passToNext(pkt);", {1:{type: "Pass To Next", id: block.id}}];
 };
