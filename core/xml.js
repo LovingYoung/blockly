@@ -80,6 +80,11 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   if (!opt_noId) {
     element.setAttribute('id', block.id);
   }
+  if(block.type === "variables_set"){
+    var varname = block.inputList[0].fieldRow[1].getValue();
+    var vartype = workspace.getTypeOfVariable(varname);
+    element.setAttribute('vartype', vartype);
+  }
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -459,6 +464,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   goog.asserts.assert(prototypeName, 'Block type unspecified: %s',
                       xmlBlock.outerHTML);
   var id = xmlBlock.getAttribute('id');
+  var vartype = xmlBlock.getAttribute("vartype");
   block = workspace.newBlock(prototypeName, id);
 
   var blockChild = null;
@@ -532,6 +538,9 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           break;
         }
         field.setValue(xmlChild.textContent);
+        if(field.name === "VAR" && prototypeName === "variables_set"){
+          workspace.createTypeOfVariable(xmlChild.textContent, vartype);
+        }
         break;
       case 'value':
       case 'statement':
