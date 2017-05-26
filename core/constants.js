@@ -236,3 +236,11 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
  * @const {string}
  */
 Blockly.PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox xml.
+ * This string indicates that the category should be dynamically populated with
+ * procedure blocks.
+ * @const {string}
+ */
+Blockly.TYPE_CATEGORY_NAME = 'TYPE';

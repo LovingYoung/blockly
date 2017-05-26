@@ -38,6 +38,7 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
+goog.require('Blockly.Types');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -94,6 +95,8 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
       Blockly.Variables.flyoutCategory);
   this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
       Blockly.Procedures.flyoutCategory);
+  this.registerToolboxCategoryCallback(Blockly.TYPE_CATEGORY_NAME,
+      Blockly.Types.flyoutCategory);
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
