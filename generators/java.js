@@ -401,3 +401,16 @@ Blockly.Java.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   return at;
 };
+
+Blockly.Java.typeDefinitionsToCode = function (workspace) {
+  var blocks = workspace.getTopBlocks();
+  var code_sum = "";
+  for(var i = 0; i < blocks.length; i++){
+    if(blocks[i] && blocks[i].type === "type_struct"){
+      var code, info;
+      [code, info] = Blockly.Java.blockToCode(blocks[i]);
+      code_sum += (code + "\n");
+    }
+  }
+  return [code_sum, info];
+};
