@@ -194,9 +194,29 @@ var skeleton =
   "public class SDNSolution extends MapleAppBase {\n";
 
 /**
+ * store the basic skeleton
+ * @type {string}
+ */
+var BASIC_SKELETON = skeleton;
+
+/**
  * End of generator code
  */
 var skeleton_end = "}";
+
+/**
+ * Build the type definition into skeleton, accroding to the type workspace
+ * @param {!Blockly.Workspace} workspace workspace including the blocks of type definitions
+ */
+Blockly.Java.buildSkeleton = function (workspace) {
+  var blocks = workspace.getTopBlocks();
+  skeleton = BASIC_SKELETON;
+  for(var i = 0; i < blocks.length; i++){
+    var code, info;
+    [code, info] = Blockly.Java.blockToCode(blocks[i]);
+    skeleton += (code + '\n');
+  }
+};
 
 /**
  * Initialise the database of variable names.
