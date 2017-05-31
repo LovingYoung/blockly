@@ -248,11 +248,63 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 
 Blockly.Variables.createVariable = function(workspace, opt_callback) {
   $("#VariableModal").modal();
+  var variable_type = $("#variable_type");
+  var variable_subtype = $("#variable_subtype");
+  var variable_subtype_value = $("#variable_subtype_value");
+
+  //CLean
+  variable_type.html("");
+  variable_subtype.html("");
+  variable_subtype_value.html("");
+  variable_subtype.addClass("hidden");
+  variable_subtype_value.addClass("hidden");
+  $("#variable_subtype_label").addClass("hidden");
+  $("#variable_subtype_value_label").addClass("hidden");
+  $("#variable_name").val("");
+
+
+  //Add Types
+  variable_type.append($('<option>', {value: "int", text: "Integer"}));
+  variable_type.append($('<option>', {value: "double", text: "Decimal"}));
+  variable_type.append($('<option>', {value: "String", text: "String"}));
+  variable_type.append($('<option>', {value: "char", text: "Character"}));
+  variable_type.append($('<option>', {value: "MAP", text: "Map"}));
+  variable_type.append($('<option>', {value: "ARRAY", text: "Array"}));
+  variable_type.append($('<option>', {value: "SET", text: "Set"}));
+
+  variable_subtype.append($('<option>', {value: "int", text: "Integer"}));
+  variable_subtype.append($('<option>', {value: "double", text: "Decimal"}));
+  variable_subtype.append($('<option>', {value: "String", text: "String"}));
+  variable_subtype.append($('<option>', {value: "char", text: "Character"}));
+
+  variable_subtype_value.append($('<option>', {value: "int", text: "Integer"}));
+  variable_subtype_value.append($('<option>', {value: "double", text: "Decimal"}));
+  variable_subtype_value.append($('<option>', {value: "String", text: "String"}));
+  variable_subtype_value.append($('<option>', {value: "char", text: "Character"}));
+
+  var types = Blockly.Types.getTypes();
+  for(var i = 0; i < types.length; i++){
+    variable_type.append($('<option>', {value: types[i], text: types[i]}));
+    variable_subtype.append($('<option>', {value: types[i], text: types[i]}));
+    variable_subtype_value.append($('<option>', {value: types[i], text: types[i]}));
+  }
+
   $("#VariableModal").on('hidden.bs.modal', function(e) {
     var confirm = $("#confirm_variable").prop('checked');
+    var name = $("#variable_name").val();
+    if(name === "") {
+      if(opt_callback) opt_callback(null);
+      return;
+    }
     if(confirm){
       var type = $("#variable_type").val();
-      var name = $("#variable_name").val();
+      if(type === "MAP"){
+        type = "HashMap<" + $("#variable_subtype").val() + "," + $("#variable_subtype_value").val() + ">";
+      } else if(type === "SET"){
+        type = "HashSet<" + $("#variable_subtype").val() + ">";
+      } else if(type === "ARRAY"){
+        type = "ArrayList<" + $("#variable_subtype").val() + ">";
+      }
       workspace.createVariable(name);
       workspace.createTypeOfVariable(name, type);
       if(opt_callback){
