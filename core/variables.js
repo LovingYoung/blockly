@@ -288,3 +288,33 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     callback(newVar);
   });
 };
+
+Blockly.Variables.variableCallback = function(event) {
+  if(event instanceof Blockly.Events.Create){
+    var blockId = event.blockId;
+    var block = workspace.getBlockById(blockId);
+    if(block.type === "variables_get"){
+      var varName = block.getFieldValue("VAR");
+      var varType = workspace.getTypeOfVariable(varName);
+      block.setOutput(true, varType);
+    } else if (block.type === "variables_set"){
+      var varName = block.getFieldValue("VAR");
+      var varType = workspace.getTypeOfVariable(varName);
+      block.inputList[0].setCheck(varType);
+    }
+    block.render();
+  } else if(event instanceof Blockly.Events.Change){
+    var blockId = event.blockId;
+    var block = workspace.getBlockById(blockId);
+    if(block.type === "variables_get"){
+      var varName = event.newValue;
+      var varType = workspace.getTypeOfVariable(varName);
+      block.setOutput(true, varType);
+    } else if (block.type === "variables_set"){
+      var varName = event.newValue;
+      var varType = workspace.getTypeOfVariable(varName);
+      block.inputList[0].setCheck(varType);
+    }
+    block.render();
+  }
+};
