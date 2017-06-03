@@ -140,7 +140,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.setColour(Blockly.Blocks.lists.HUE);
     this.itemCount_ = 3;
     this.updateShape_();
-    this.setOutput(true, 'Array');
+    this.setOutput(true, ['ArrayList<String>','Array']);
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
     this.setInputsInline(true);
