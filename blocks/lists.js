@@ -241,7 +241,7 @@ Blockly.Blocks['lists_create_with'] = {
     // Add new inputs.
     for (var i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        var input = this.appendValueInput('ADD' + i);
+        var input = this.appendValueInput('ADD' + i).setCheck("String");
         if (i == 0) {
           input.appendField("Static Route");
         }
