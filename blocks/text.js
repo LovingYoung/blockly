@@ -81,6 +81,7 @@ Blockly.Blocks['text_join'] = {
     this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
     this.updateShape_();
     this.setOutput(true, 'String');
+    this.setInputsInline(true);
     this.setMutator(new Blockly.Mutator(['text_create_join_item']));
     this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
   },
@@ -181,7 +182,7 @@ Blockly.Blocks['text_join'] = {
     // Add new inputs.
     for (var i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        var input = this.appendValueInput('ADD' + i);
+        var input = this.appendValueInput('ADD' + i).setCheck("String");
         if (i == 0) {
           input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
         }
